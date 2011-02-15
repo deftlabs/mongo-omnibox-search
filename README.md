@@ -2,11 +2,11 @@
 About
 =============
 
-MongoDB search is a Chrome extension for searching the Mongo wiki docs via the omnibox.
+Mongo Search is a Chrome extension for searching the Mongo wiki docs via the omnibox.
 
 You can install the extension from the Chrome Web Store:
     
-* [https://chrome.google.com/webstore/detail/apgglicbkgjcfnohdcgbcobengnkcjef](https://chrome.google.com/webstore/detail/apgglicbkgjcfnohdcgbcobengnkcjef)
+* [https://chrome.google.com/webstore/detail/dlkiamgbjcnhcigmipehgdcnnaejpmgc](https://chrome.google.com/webstore/detail/dlkiamgbjcnhcigmipehgdcnnaejpmgc)
 
 Thie product is not affiliated with MongoDB.
 
