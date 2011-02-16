@@ -1,4 +1,21 @@
-// == Helper Prototype Extensions ==
+/**
+ * Original template: Copyright (c) 2011, Michael Safyan
+ * 
+ * Copyright 2011, Deft Labs.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at:
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/
+
 Storage.prototype.setObject = function(key, value) { this.setItem(key, JSON.stringify(value)); };
 
 Storage.prototype.getObject = function(key) { return JSON.parse(this.getItem(key)); };
@@ -9,9 +26,7 @@ String.prototype.startsWith = function(str) {
 };
 
 String.prototype.endsWith = function(str) {
-    if (str.length > this.length) {
-        return false;
-    }
+    if (str.length > this.length) { return false; };
     return (String(this).substr(this.length - str.length, this.length) == str);
 };
 
@@ -123,6 +138,39 @@ String.prototype.strip = function() {
             return;
         }
 
+        var searchKey = md5(stripped_text);
+        var searchKeyDate = searchKey + "-Updated";
+        var localSearchResults = null;
+
+        var now = (new Date()).getTime();
+
+        var staleSearchCache = false;
+
+        // Check the local storage.
+        if (localStorage[searchKey]) {
+            localSearchResults = localStorage.getObject(searchKey);
+
+            if (!localStorage[searchKeyDate]) {
+                localStorage.setObject(searchKeyDate, now);
+            } else {
+                var cachedTime = new Date(localStorage.getObject(searchKeyDate)).getTime();
+
+                // If time is older than one week in ms.
+                if ((now - cachedTime) > 604800000) {
+                    staleSearchCache  = true;
+                }
+            }
+
+            if (!staleSearchCache) {
+                for (var idx=0; idx < localSearchResults.length; idx++) {
+                    var match = localSearchResults[idx];
+                    if (match.spaceKey != 'DOCS') continue;
+                    nav("http://www.mongodb.org" + match.href);
+                    return;
+                }
+            }
+        }
+ 
         var searchUrl = "http://www.mongodb.org/json/contentnamesearch.action?query=" + encodeURIComponent(stripped_text);
 
         xhr(searchUrl,
@@ -131,11 +179,13 @@ String.prototype.strip = function() {
                 var result = JSON.parse(req.responseText);
 
                 if (result.contentNameMatches && result.contentNameMatches[0]) {
+                    localStorage.setObject(searchKey, result.contentNameMatches[0]);
+                    localStorage.setObject(searchKeyDate, now);
 
                     for (var idx=0; idx < result.contentNameMatches[0].length; idx++) {
                         var match = result.contentNameMatches[0][idx];
 
-                        if (match.spaceKey != 'DOCS') continue; 
+                        if (match.spaceKey != 'DOCS') continue;
 
                         nav("http://www.mongodb.org" + match.href);
                         return;
