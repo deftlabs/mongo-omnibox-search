@@ -16,6 +16,8 @@ This product uses/includes the following open source projects:
 
 * Images are from [MongoDB](http://www.mongodb.org) - Attribution-NonCommercial-ShareAlike 3.0 Unported (CC BY-NC-SA 3.0) 
 
+* MD5 Lib - [Public Domain](http://www.myersdaily.org/joseph/javascript/md5-text.html) - Copyright (c) Joseph K. Myers - contact developer if license is incorrect.
+
 License
 =============
 
