@@ -1,14 +1,14 @@
 /**
  * Original template: Copyright (c) 2011, Michael Safyan
- * 
+ *
  * Copyright 2011, Deft Labs.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at:
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -64,13 +64,13 @@ String.prototype.strip = function() {
         };
         return req;
     };
-    
+
     // Navigates to the specified URL.
     function nav(url) {
         console.log("Navigating to: " + url);
         chrome.tabs.getSelected(null, function(tab) { chrome.tabs.update(tab.id, {url: url}); });
     };
-    
+
     // Sets the the default styling for the first search item
     function setDefaultSuggestion(text) {
         if (text) {
@@ -79,60 +79,60 @@ String.prototype.strip = function() {
             chrome.omnibox.setDefaultSuggestion({"description": "<url><match>[Name]</match></url>"});
         }
     };
-    
+
     // Prefetch necessary data
     chrome.omnibox.onInputStarted.addListener(function(){
         console.log("Input started");
         setDefaultSuggestion('');
-        
+
         // TODO: Prefetch data here
     });
-    
+
     chrome.omnibox.onInputCancelled.addListener(function() {
         console.log("Input cancelled.");
         setDefaultSuggestion('');
     });
-    
+
     setDefaultSuggestion('');
-    
+
     chrome.omnibox.onInputChanged.addListener(function(text, suggest_callback) {
         setDefaultSuggestion(text);
         if (!text) { return; };
-        
+
         var kMaxSuggestions = 10;
         var suggestions = [];
         var stripped_text = text.strip();
         if (!stripped_text) {
             return;
         }
-        
+
         var qlower = stripped_text.toLowerCase();
 
         if (stripped_text.length >= 2) {
-            // Do nothing for now.        
+            // Do nothing for now.
         }
 
         suggest_callback(suggestions);
     });
-    
+
     chrome.omnibox.onInputEntered.addListener(function(text) {
         console.log("Input entered: " + text);
         if (!text) {
             nav("http://www.mongodb.org/");
             return;
         }
-        
+
         var stripped_text = text.strip();
         if (!stripped_text) {
             nav("http://www.mongodb.org/");
             return;
         }
-        
+
         if (stripped_text.startsWith("http://") || stripped_text.startsWith("https://")) {
             nav(stripped_text);
             return;
         }
-        
+
         if (stripped_text.startsWith("www.") || stripped_text.endsWith(".com") || stripped_text.endsWith(".net") || stripped_text.endsWith(".org") || stripped_text.endsWith(".edu")) {
             nav("http://" + stripped_text);
             return;
@@ -170,7 +170,7 @@ String.prototype.strip = function() {
                 }
             }
         }
- 
+
         var searchUrl = "http://www.mongodb.org/json/contentnamesearch.action?query=" + encodeURIComponent(stripped_text);
 
         xhr(searchUrl,
@@ -196,8 +196,8 @@ String.prototype.strip = function() {
                 console.log("Failed to receive: " + url);
             }
         ).send(null);
-       
-        // No results found, going to site search.   
+
+        // No results found, going to site search.
         nav("http://www.mongodb.org/dosearchsite.action?queryString=" + encodeURIComponent(stripped_text));
     });
 })();
