@@ -118,13 +118,13 @@ String.prototype.strip = function() {
     chrome.omnibox.onInputEntered.addListener(function(text) {
         console.log("Input entered: " + text);
         if (!text) {
-            nav("http://www.mongodb.org/");
+            nav("http://docs.mongodb.org/");
             return;
         }
 
         var stripped_text = text.strip();
         if (!stripped_text) {
-            nav("http://www.mongodb.org/");
+            nav("http://docs.mongodb.org/");
             return;
         }
 
@@ -165,13 +165,16 @@ String.prototype.strip = function() {
                 for (var idx=0; idx < localSearchResults.length; idx++) {
                     var match = localSearchResults[idx];
                     if (match.spaceKey != 'DOCS') continue;
-                    nav("http://www.mongodb.org" + match.href);
+                    nav("http://docs.mongodb.org" + match.href);
                     return;
                 }
             }
         }
 
-        var searchUrl = "http://www.mongodb.org/json/contentnamesearch.action?query=" + encodeURIComponent(stripped_text);
+        //var searchUrl = "http://www.mongodb.org/json/contentnamesearch.action?query=" + encodeURIComponent(stripped_text);
+
+        /*
+        var searchUrl = "http://www.google.com/cse/home?cx=017213726194841070573:WMX6838984&ie=UTF-8&q=" + encodeURIComponent(stripped_text);
 
         xhr(searchUrl,
             function(url, req) {
@@ -196,8 +199,11 @@ String.prototype.strip = function() {
                 console.log("Failed to receive: " + url);
             }
         ).send(null);
+        */
 
         // No results found, going to site search.
-        nav("http://www.mongodb.org/dosearchsite.action?queryString=" + encodeURIComponent(stripped_text));
+        // Old Wiki search nav("http://www.mongodb.org/dosearchsite.action?queryString=" + encodeURIComponent(stripped_text));
+
+        nav("http://docs.mongodb.org/manual/search/?q=" + encodeURIComponent(stripped_text));
     });
 })();
