@@ -1,7 +1,7 @@
 {
     "name": "Mongo Search",
     "description": "Adds support to the Chrome omnibox to search the MongoDB docs.",
-    "version": "0.5.4",
+    "version": "0.5.5",
 
     "background" : {
         "page": "background.html"
