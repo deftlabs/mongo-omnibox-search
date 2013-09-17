@@ -204,6 +204,6 @@ String.prototype.strip = function() {
         // No results found, going to site search.
         // Old Wiki search nav("http://www.mongodb.org/dosearchsite.action?queryString=" + encodeURIComponent(stripped_text));
 
-        nav("http://docs.mongodb.org/manual/search/?q=" + encodeURIComponent(stripped_text));
+        nav("http://docs.mongodb.org/manual/search/?query=" + encodeURIComponent(stripped_text));
     });
 })();
